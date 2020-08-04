@@ -26,7 +26,6 @@ COPY --from=terraform /bin/terraform /bin/
 
 RUN cd /root/.terraform.d/plugins \
         && curl -L $LOCATION/$BINARY_NAME | tar -xz \
-        && mv terraform-provider-libvirt terraform-provider-libvirt-v$PLUGIN_VERSION \
         && chown root:root *
 
 VOLUME ${PROJECT_DIR}
