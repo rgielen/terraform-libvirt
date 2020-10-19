@@ -1,4 +1,4 @@
-ARG TERRAFORM_VERSION=0.12.29
+ARG TERRAFORM_VERSION=0.13.4
 
 FROM hashicorp/terraform:$TERRAFORM_VERSION AS terraform
 
@@ -16,11 +16,11 @@ ENV PROJECT_DIR=/var/tfproject
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
-        libvirt0 xsltproc mkisofs ca-certificates openssh-client curl \
+        libvirt-bin xsltproc mkisofs ca-certificates openssh-client curl wget httpie \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
-    && mkdir -p /root/.terraform.d/plugins
+    && mkdir -p /root/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/$PLUGIN_VERSION/linux_amd64
 
 COPY --from=terraform /bin/terraform /bin/
 
