@@ -7,6 +7,7 @@ FROM ubuntu:18.04
 ARG PLUGIN_VERSION=0.6.2
 ARG BINARY_NAME=terraform-provider-libvirt-0.6.2+git.1585292411.8cbe9ad0.Ubuntu_18.04.amd64.tar.gz
 ARG LOCATION=https://github.com/dmacvicar/terraform-provider-libvirt/releases/download/v$PLUGIN_VERSION/
+ARG PLUGIN_TARGETDIR=/root/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/$PLUGIN_VERSION/linux_amd64
 
 ENV PROJECT_DIR=/var/tfproject
 
@@ -20,11 +21,11 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
-    && mkdir -p /root/.local/share/terraform/plugins/registry.terraform.io/dmacvicar/libvirt/$PLUGIN_VERSION/linux_amd64
+    && mkdir -p $PLUGIN_TARGETDIR
 
 COPY --from=terraform /bin/terraform /bin/
 
-RUN cd /root/.terraform.d/plugins \
+RUN cd $PLUGIN_TARGETDIR \
         && curl -L $LOCATION/$BINARY_NAME | tar -xz \
         && chown root:root *
 
